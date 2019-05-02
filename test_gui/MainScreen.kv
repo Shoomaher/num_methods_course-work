@@ -1,0 +1,71 @@
+<MyButton@Button>:
+    # background_down: 'button_down.png'
+    # background_normal: 'button_normal.png'
+    color: 1, 1, 1, 1
+    size:75,40
+    size_hint:None,None
+    bold: True
+    on_press:
+        # self.parent.parent.ids.textEdit.text = self.text; \
+        self.color = [.10980392156862745, .5372549019607843, .996078431372549, 1]
+    on_release: self.color = [1, 1, 1, 1]
+
+<TopText@BoxLayout>:
+    orientation:'horizontal'
+    padding: [0,0,120,0]
+    Label:
+        color: 0,0,0,0
+        text: 'Enter Expression:'
+        # size:350,50
+        size_hint:0.7,0.17
+    Label:
+        color: 0,0,0,0
+        text: 'Enter endges a and b:'
+        # size:350,50
+        size_hint:0.3,0.17
+
+<BottomText@BoxLayout>:
+    orientation:'horizontal'
+    padding:35
+    spacing:25
+    # size_hint: 0.7,0.2
+    Label:
+        color: 0,0,0,0
+        text: 'f(x) = '
+        size_hint: 0.1,0.4
+    TextInput:
+        id: expression
+        multiline:False
+        # size:300,40
+        size_hint: 1,0.4
+    TextInput:
+        id: a_edge
+        multiline:False
+        # size:75,40
+        size_hint: 0.2,0.4
+    TextInput:
+        id: b_edge
+        multiline:False
+        # size:75,40
+        size_hint: 0.2,0.4
+    MyButton:
+        text: 'RUN'
+
+<DataPanel@BoxLayout>:
+    orientation:'vertical'
+    TopText:
+    BottomText:
+
+
+
+<MyActivity@BoxLayout>:
+    canvas.before:
+        Color:
+            rgba: 1,1,1,1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    orientation: 'vertical'
+    DataPanel:
+    Image:
+        source: 'empty.png'
