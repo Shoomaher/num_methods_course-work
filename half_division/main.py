@@ -32,7 +32,8 @@ def validate_data(raw_expr, a_edge, b_edge):
     right_edge = None
     expression = None
 
-    if (not a_edge.get()) or (not b_edge.get()):
+    if (not a_edge.get()) or (not b_edge.get()) or (not raw_expr.get()):
+        validation_error('Not all data was entered')
         return None
 
     try:
@@ -70,10 +71,14 @@ def validate_data(raw_expr, a_edge, b_edge):
 
 def process(params: Params):
     """ Process the method """
-    return None
+    if not params:
+        return
+
+    process_window = Toplevel()
 
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
+def main():
     logging.basicConfig(filename=PureWindowsPath(os.path.realpath(__file__)).parent / 'last_run.log',
                         filemode='w', level=logging.DEBUG)
 
@@ -110,7 +115,7 @@ if __name__ == "__main__":
     b_edge_entry = ttk.Entry(main_frame, width=4, textvariable=b)
     b_edge_entry.grid(column=6, row=2, sticky='E')
 
-    run_btn = ttk.Button(main_frame, text='RUN',
+    run_btn = ttk.Button(main_frame, text='RUN!',
                          command=lambda: process(validate_data(expr, a, b))).grid(column=7, row=2)
 
     expr_entry = ttk.Entry(main_frame, width=18, textvariable=expr)
@@ -121,7 +126,10 @@ if __name__ == "__main__":
 
     expr_entry.focus()
 
-    root.bind('<Return>', process(validate_data(expr, a, b)))
+    root.bind('<Return>', lambda: process(validate_data(expr, a, b)))
     logging.info('GUI init finished')
     root.mainloop()
     logging.info('Finished running')
+
+
+main()
