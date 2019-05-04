@@ -1,14 +1,15 @@
 import logging
 import os
+import tkinter as tk
 from collections import namedtuple
 from pathlib import PureWindowsPath
 from tkinter import *
 from tkinter import messagebox, ttk
 
-import matplotlib
 import pandas
 import sympy
 from sympy.abc import x
+from sympy.plotting import plot
 
 from table import Table
 
@@ -75,10 +76,15 @@ def process(params: Params):
         return
 
     process_window = Toplevel()
+    process_window.title('Process half-division method')
+    main_frame = ttk.Frame(process_window, padding='10 10 10 10')
+    main_frame.grid(column=0, row=0, sticky=('N', 'W', 'E', 'S'))
+    show_plot_btn = ttk.Button(main_frame, text='Show plot', command=lambda: plot(
+        params.expression, show=True)).grid(column=0, row=0)
+    # expr_plot = plot(params.expression, show=True)
 
 
-# if __name__ == "__main__":
-def main():
+if __name__ == "__main__":
     logging.basicConfig(filename=PureWindowsPath(os.path.realpath(__file__)).parent / 'last_run.log',
                         filemode='w', level=logging.DEBUG)
 
@@ -130,6 +136,3 @@ def main():
     logging.info('GUI init finished')
     root.mainloop()
     logging.info('Finished running')
-
-
-main()
