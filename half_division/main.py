@@ -8,6 +8,7 @@ from sympy.abc import x
 import os
 from collections import namedtuple
 from pathlib import PureWindowsPath
+from table import Table
 
 """ Main script for half-division method implementation
 Gonna store data in pandas DataFrame
