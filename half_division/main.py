@@ -1,13 +1,15 @@
-from tkinter import *
-from tkinter import ttk, messagebox
 import logging
-import pandas
-import matplotlib
-import sympy
-from sympy.abc import x
 import os
 from collections import namedtuple
 from pathlib import PureWindowsPath
+from tkinter import *
+from tkinter import messagebox, ttk
+
+import matplotlib
+import pandas
+import sympy
+from sympy.abc import x
+
 from table import Table
 
 """ Main script for half-division method implementation
