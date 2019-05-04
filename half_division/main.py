@@ -27,8 +27,8 @@ def validate_data(raw_expr, a_edge, b_edge):
         return None
 
     try:
-        left_edge = float(a_edge.get())
-        right_edge = float(b_edge.get())
+        left_edge = float(a_edge.get().replace(',', '.'))
+        right_edge = float(b_edge.get().replace(',', '.'))
     except ValueError:
         logging.error('Unable to parse edges')
         return None
@@ -37,6 +37,14 @@ def validate_data(raw_expr, a_edge, b_edge):
         expression = sympy.sympify(raw_expr.get())
     except sympy.SympifyError as e:
         logging.error(e)
+        return None
+
+    if x not in expression.free_symbols:
+        logging.error('Wrong variable')
+        return None
+
+    if len(expression.free_symbols) > 1:
+        logging.error('Extra variables')
         return None
 
     logging.info('Left edge: {}'.format(left_edge))
@@ -107,4 +115,4 @@ if __name__ == "__main__":
     root.bind('<Return>', process(validate_data(expr, a, b)))
     logging.info('GUI init finished')
     root.mainloop()
-    logging.info('Finished runnig')
+    logging.info('Finished running')
