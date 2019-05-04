@@ -1,3 +1,26 @@
+#:kivy 1.0
+<MyActivity@BoxLayout>:
+    # canvas.before:
+    #     Color:
+    #         rgba: 1,1,1,1
+    #     Rectangle:
+    #         pos: self.pos
+    #         size: self.size
+    orientation: 'vertical'
+    DataPanel:
+    ResultsPanel:
+
+<TablePanel@GridLayout>:
+    cols : 5
+    rows : 5
+    
+
+
+<ResultsPanel@BoxLayout>:
+    orientation:'horizontal'
+    Image:
+        source: 'empty.png'
+
 <MyButton@Button>:
     # background_down: 'button_down.png'
     # background_normal: 'button_normal.png'
@@ -14,12 +37,12 @@
     orientation:'horizontal'
     padding: [0,0,120,0]
     Label:
-        color: 0,0,0,0
         text: 'Enter Expression:'
         # size:350,50
         size_hint:0.7,0.17
+        color: (0,0,0,1)
     Label:
-        color: 0,0,0,0
+        color: (0,0,0,1)
         text: 'Enter endges a and b:'
         # size:350,50
         size_hint:0.3,0.17
@@ -30,9 +53,14 @@
     spacing:25
     # size_hint: 0.7,0.2
     Label:
-        color: 0,0,0,0
+        color: (0,0,0,1)
         text: 'f(x) = '
         size_hint: 0.1,0.4
+        canvas.before:
+            Rectangle:
+                pos:self.pos
+                size:self.size
+                border: 10,10,10,10
     TextInput:
         id: expression
         multiline:False
@@ -58,14 +86,3 @@
 
 
 
-<MyActivity@BoxLayout>:
-    canvas.before:
-        Color:
-            rgba: 1,1,1,1
-        Rectangle:
-            pos: self.pos
-            size: self.size
-    orientation: 'vertical'
-    DataPanel:
-    Image:
-        source: 'empty.png'

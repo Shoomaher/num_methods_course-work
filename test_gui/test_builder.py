@@ -1,8 +1,14 @@
-from kivy.app import App
-from kivy.factory import Factory
-from kivy.lang import Builder
 from kivy.core.window import Window
-Window.size = (900, 800)
+from kivy.config import Config
+from kivy.lang import Builder
+from kivy.factory import Factory
+from kivy.app import App
+import kivy
+
+Window.clearcolor = (1, 1, 1, 1)
+Config.set('graphics', 'resizable', 0)
+Config.set('graphics', 'width', 1280)
+Config.set('graphics', 'height', 720)
 
 Builder.load_file('MainScreen.kv')
 
