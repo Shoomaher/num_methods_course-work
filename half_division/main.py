@@ -1,5 +1,5 @@
 from tkinter import *
-from tkinter import ttk
+from tkinter import ttk, messagebox
 import logging
 import pandas
 import matplotlib
@@ -17,6 +17,12 @@ Process the function calculation using sympy
 Params = namedtuple('Params', ['expression', 'left_edge', 'right_edge'])
 
 
+def validation_error(details):
+    """ Show validation error message """
+    logging.error(details)
+    messagebox.showerror('Validation error', details)
+
+
 def validate_data(raw_expr, a_edge, b_edge):
     """ Validate entered data"""
     left_edge = None
@@ -30,7 +36,7 @@ def validate_data(raw_expr, a_edge, b_edge):
         left_edge = float(a_edge.get().replace(',', '.'))
         right_edge = float(b_edge.get().replace(',', '.'))
     except ValueError:
-        logging.error('Unable to parse edges')
+        validation_error('Wrong values in edges')
         return None
 
     try:
@@ -40,11 +46,11 @@ def validate_data(raw_expr, a_edge, b_edge):
         return None
 
     if x not in expression.free_symbols:
-        logging.error('Wrong variable')
+        validation_error('Used wrong variable in expression')
         return None
 
     if len(expression.free_symbols) > 1:
-        logging.error('Extra variables')
+        validation_error('Extra variables present')
         return None
 
     logging.info('Left edge: {}'.format(left_edge))
