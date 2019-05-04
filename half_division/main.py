@@ -9,7 +9,7 @@ from tkinter import messagebox, ttk
 import pandas
 import sympy
 from sympy.abc import x
-from sympy.plotting import plot
+from sympy.plotting import plot, plot_implicit
 
 from table import Table
 
@@ -79,9 +79,9 @@ def process(params: Params):
     process_window.title('Process half-division method')
     main_frame = ttk.Frame(process_window, padding='10 10 10 10')
     main_frame.grid(column=0, row=0, sticky=('N', 'W', 'E', 'S'))
+
     show_plot_btn = ttk.Button(main_frame, text='Show plot', command=lambda: plot(
-        params.expression, show=True)).grid(column=0, row=0)
-    # expr_plot = plot(params.expression, show=True)
+        params.expression, (x, params.left_edge, params.right_edge), show=True, title=str(params.expression))).grid(column=0, row=0)
 
 
 if __name__ == "__main__":
@@ -132,7 +132,6 @@ if __name__ == "__main__":
 
     expr_entry.focus()
 
-    root.bind('<Return>', lambda: process(validate_data(expr, a, b)))
     logging.info('GUI init finished')
     root.mainloop()
     logging.info('Finished running')
