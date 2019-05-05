@@ -8,7 +8,8 @@ from tkinter import messagebox, ttk
 
 import sympy
 from sympy.abc import x
-from sympy.plotting import plot, plot_implicit
+from sympy.plotting import plot
+from matplotlib.pyplot import annotate
 
 from table import Table
 from half_div import calc, ACCURACY
@@ -88,8 +89,13 @@ def process(params: Params):
     main_frame = ttk.Frame(process_window, padding='10 10 10 10')
     main_frame.grid(column=0, row=0, sticky=('N', 'W', 'E', 'S'))
 
-    show_plot_btn = ttk.Button(main_frame, text='Show plot', command=lambda: plot(
-        params.expression, (x, params.left_edge, params.right_edge), show=True, title=str(params.expression))).grid(column=1, row=0)
+    p = plot(params.expression, (x, params.left_edge, params.right_edge),
+             show=False, title=str(params.expression))
+    # p.append(plot(result, 0, (x, result, result+ACCURACY),
+    #               line_color='red', linestyle='-', show=False)[0])
+
+    show_plot_btn = ttk.Button(
+        main_frame, text='Show plot', command=lambda: p.show()).grid(column=1, row=0)
 
     ttk.Label(main_frame, text='Result: {}'.format(
         result)).grid(column=0, row=0)
