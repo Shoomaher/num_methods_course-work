@@ -7,6 +7,7 @@ from tkinter import *
 from tkinter import messagebox, ttk
 
 import sympy
+import csv
 from matplotlib.pyplot import annotate
 from sympy.abc import x
 from sympy.plotting import plot
@@ -70,6 +71,21 @@ def validate_data(raw_expr, a_edge, b_edge):
     return Params(expression=expression, left_edge=left_edge, right_edge=right_edge)
 
 
+def save_csv(data):
+    """ Save history of processing to csv file """
+    logging.info('Writing data to csv file')
+    with open(PureWindowsPath(os.path.realpath(__file__)).parent / 'results.csv', 'w', newline='') as csvfile:
+        csvwriter = csv.writer(csvfile)
+        csvwriter.writerow(('left', 'left_val', 'middle',
+                            'middle_val', 'right', 'right_val'))
+
+        for row in data:
+            csvwriter.writerow(row)
+
+    logging.info('Finished writing')
+    messagebox.showinfo('Save to CSV', 'Successfully saved!')
+
+
 def process(params: Params):
     """ Process the method """
     if not params:
@@ -97,6 +113,9 @@ def process(params: Params):
 
     show_plot_btn = ttk.Button(
         main_frame, text='Show plot', command=lambda: p.show()).grid(column=1, row=0)
+
+    save_excel_btn = ttk.Button(main_frame, text='Save to CSV', command=lambda: save_csv(
+        proc_hist)).grid(column=1, row=1)
 
     ttk.Label(main_frame, text='Result: {}'.format(
         result)).grid(column=0, row=0)
