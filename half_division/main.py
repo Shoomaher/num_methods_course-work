@@ -6,15 +6,14 @@ from pathlib import PureWindowsPath
 from tkinter import *
 from tkinter import messagebox, ttk
 
-import pandas
 import sympy
 from sympy.abc import x
 from sympy.plotting import plot, plot_implicit
 
 from table import Table
+from half_div import calc, ACCURACY
 
 """ Main script for half-division method implementation
-Gonna store data in pandas DataFrame
 Process the function calculation using sympy
 """
 
@@ -73,7 +72,16 @@ def validate_data(raw_expr, a_edge, b_edge):
 def process(params: Params):
     """ Process the method """
     if not params:
+        logging.error('No params provided!')
         return
+
+    proc_hist = calc(params)
+
+    if not proc_hist:
+        messagebox.showerror('Error!', 'Unable to process')
+        return
+
+    result = proc_hist[-1]['middle']
 
     process_window = Toplevel()
     process_window.title('Process half-division method')
@@ -81,12 +89,20 @@ def process(params: Params):
     main_frame.grid(column=0, row=0, sticky=('N', 'W', 'E', 'S'))
 
     show_plot_btn = ttk.Button(main_frame, text='Show plot', command=lambda: plot(
-        params.expression, (x, params.left_edge, params.right_edge), show=True, title=str(params.expression))).grid(column=0, row=0)
+        params.expression, (x, params.left_edge, params.right_edge), show=True, title=str(params.expression))).grid(column=1, row=0)
+
+    ttk.Label(main_frame, text='Result: {}'.format(
+        result)).grid(column=0, row=0)
+    ttk.Label(main_frame, text='Accuracy: {}'.format(
+        ACCURACY)).grid(column=0, row=1)
+
+    for child in main_frame.winfo_children():
+        child.grid_configure(padx=5, pady=5)
 
 
 if __name__ == "__main__":
     logging.basicConfig(filename=PureWindowsPath(os.path.realpath(__file__)).parent / 'last_run.log',
-                        filemode='w', level=logging.DEBUG)
+                        filemode='w', level=logging.INFO)
 
     root = Tk()
     root.title('Half-division method')
