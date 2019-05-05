@@ -7,13 +7,12 @@ from tkinter import *
 from tkinter import messagebox, ttk
 
 import sympy
+from matplotlib.pyplot import annotate
 from sympy.abc import x
 from sympy.plotting import plot
-from matplotlib.pyplot import annotate
-from functools import reduce
 
+from half_div import ACCURACY, calc
 from table import Table
-from half_div import calc, ACCURACY
 
 """ Main script for half-division method implementation
 Process the function calculation using sympy
@@ -84,12 +83,12 @@ def process(params: Params):
         return
 
     # last middle in the processing history:
-    result = proc_hist[-1][2]
+    result = round(proc_hist[-1][2], 5)
 
     process_window = Toplevel()
     process_window.title('Process half-division method')
     main_frame = ttk.Frame(process_window, padding='10 10 10 10')
-    main_frame.grid(column=0, row=0, sticky=('N', 'W', 'E', 'S'))
+    main_frame.grid(column=0, row=0, sticky=(tk.N, tk.W, tk.E, tk.S))
 
     p = plot(params.expression, (x, params.left_edge, params.right_edge),
              show=False, title=str(params.expression))
@@ -110,7 +109,7 @@ def process(params: Params):
     table = Table(main_frame, headings=('left', 'left_va;', 'middle',
                                         'middle_val', 'right', 'right_val'), rows=tuple(proc_hist))
 
-    table.grid(column=0, row=2)
+    table.grid(column=0, row=2, rowspan=12, sticky=tk.S)
 
     for child in main_frame.winfo_children():
         child.grid_configure(padx=5, pady=5)
@@ -123,7 +122,7 @@ if __name__ == "__main__":
     root = Tk()
     root.title('Half-division method')
     main_frame = ttk.Frame(root, padding='3 3 12 12')
-    main_frame.grid(column=0, row=0, sticky=('N', 'W', 'E', 'S'))
+    main_frame.grid(column=0, row=0, sticky=(tk.N, tk.W, tk.E, tk.S))
     root.columnconfigure(0, weight=1)
     root.rowconfigure(0, weight=1)
 
@@ -133,31 +132,31 @@ if __name__ == "__main__":
     b = StringVar()
 
     ttk.Label(main_frame, text='Enter expression:').grid(
-        column=1, row=1, sticky='W', columnspan=2)
+        column=1, row=1, sticky=tk.W, columnspan=2)
 
     ttk.Label(main_frame, text='Enter edges:').grid(
-        column=3, row=1, sticky='W', columnspan=2)
+        column=3, row=1, sticky=tk.W, columnspan=2)
 
     ttk.Label(main_frame, text='f(x) =').grid(
-        column=1, row=2, sticky='W')
+        column=1, row=2, sticky=tk.W)
 
     ttk.Label(main_frame, text='Left:').grid(
-        column=3, row=2, sticky='W')
+        column=3, row=2, sticky=tk.W)
 
     ttk.Label(main_frame, text='Right:').grid(
-        column=5, row=2, sticky='W')
+        column=5, row=2, sticky=tk.W)
 
     a_entry = ttk.Entry(main_frame, width=4, textvariable=a)
-    a_entry.grid(column=4, row=2, sticky='E')
+    a_entry.grid(column=4, row=2, sticky=tk.E)
 
     b_edge_entry = ttk.Entry(main_frame, width=4, textvariable=b)
-    b_edge_entry.grid(column=6, row=2, sticky='E')
+    b_edge_entry.grid(column=6, row=2, sticky=tk.E)
 
     run_btn = ttk.Button(main_frame, text='RUN!',
                          command=lambda: process(validate_data(expr, a, b))).grid(column=7, row=2)
 
     expr_entry = ttk.Entry(main_frame, width=18, textvariable=expr)
-    expr_entry.grid(column=2, row=2, sticky='E')
+    expr_entry.grid(column=2, row=2, sticky=tk.E)
 
     for child in main_frame.winfo_children():
         child.grid_configure(padx=5, pady=5)
