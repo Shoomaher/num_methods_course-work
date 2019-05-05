@@ -51,8 +51,12 @@ def calc(setup: Params):
 
         tmp['middle'] = tmp['left'] + (tmp['right']-tmp['left'])/2
         tmp['middle_val'] = fun(tmp['middle'])
+        tmp['left_val'] = fun(tmp['left'])
+        tmp['right_val'] = fun(tmp['right'])
 
-        data.append(tmp)
+        data.append(list(tmp.values()))
+        logging.info('{} iteration'.format(i))
+        logging.info(tmp)
 
         if i > 1000:
             logging.error('Iteration error')

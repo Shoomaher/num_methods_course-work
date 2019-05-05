@@ -83,7 +83,8 @@ def process(params: Params):
         messagebox.showerror('Error!', 'Unable to process')
         return
 
-    result = proc_hist[-1]['middle']
+    # last middle in the processing history:
+    result = proc_hist[-1][2]
 
     process_window = Toplevel()
     process_window.title('Process half-division method')
@@ -103,12 +104,11 @@ def process(params: Params):
     ttk.Label(main_frame, text='Accuracy: {}'.format(
         ACCURACY)).grid(column=0, row=1)
 
-    to_show = reduce(lambda full_list, ind: full_list +
-                     [list(ind.values()), ], proc_hist, [])
-    head = proc_hist[0].keys()
+    # to_show = reduce(lambda full_list, ind: full_list +
+    #                  [list(ind.values()), ], proc_hist, [])
 
-    logging.info(head, to_show[0])
-    table = Table(main_frame, headings=tuple(head), rows=tuple(to_show))
+    table = Table(main_frame, headings=('left', 'left_va;', 'middle',
+                                        'middle_val', 'right', 'right_val'), rows=tuple(proc_hist))
 
     table.grid(column=0, row=2)
 
