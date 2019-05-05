@@ -10,6 +10,7 @@ import sympy
 from sympy.abc import x
 from sympy.plotting import plot
 from matplotlib.pyplot import annotate
+from functools import reduce
 
 from table import Table
 from half_div import calc, ACCURACY
@@ -101,6 +102,15 @@ def process(params: Params):
         result)).grid(column=0, row=0)
     ttk.Label(main_frame, text='Accuracy: {}'.format(
         ACCURACY)).grid(column=0, row=1)
+
+    to_show = reduce(lambda full_list, ind: full_list +
+                     [list(ind.values()), ], proc_hist, [])
+    head = proc_hist[0].keys()
+
+    logging.info(head, to_show[0])
+    table = Table(main_frame, headings=tuple(head), rows=tuple(to_show))
+
+    table.grid(column=0, row=2)
 
     for child in main_frame.winfo_children():
         child.grid_configure(padx=5, pady=5)
