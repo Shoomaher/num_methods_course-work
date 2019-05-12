@@ -32,6 +32,13 @@ def save_csv(vals: Vals):
     messagebox.showinfo('Save to CSV', 'Successfully saved!')
 
 
+def save_plot(fig: Figure):
+    """ Save figure """
+    fig.savefig('plot.png')
+    logging.info('Saved plot to png')
+    messagebox.showinfo('Save plot', 'Successfully saved!')
+
+
 def get_interpolator(x: np.array, y: np.array):
     """ Get the interpolator  object """
     return intp.PchipInterpolator(x, y)
@@ -91,7 +98,7 @@ def process(vals: Vals):
                          command=lambda: save_csv(Vals(x=np.round(x_range, decimals=4), y=np.round(y_range, decimals=4)))).grid(column=0, row=2, columnspan=2, padx=5, pady=5, sticky=tk.E+tk.W)
 
     plot_btn = ttk.Button(main_frame, text='Save plot',
-                          command=lambda: fig.savefig('plot.png')).grid(column=0, row=3, columnspan=2, padx=5, pady=5, sticky=tk.E+tk.W)
+                          command=lambda: save_plot(fig)).grid(column=0, row=3, columnspan=2, padx=5, pady=5, sticky=tk.E+tk.W)
 
     logging.info('Finished building GUI')
 
