@@ -105,3 +105,4 @@ venv.bak/
 .vscode/
 *.log
 *.csv
+*.png
