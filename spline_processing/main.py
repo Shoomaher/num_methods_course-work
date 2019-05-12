@@ -30,6 +30,8 @@ def get_interpolator(x: np.array, y: np.array):
 
 def process(vals: Vals):
     """ Process the interpolation """
+    if not vals:
+        return
     process_window = Toplevel()
     process_window.title('Process the interpolation')
     main_frame = ttk.Frame(process_window, padding='10 10 10 10')
@@ -47,7 +49,7 @@ def process(vals: Vals):
     x_range = np.arange(x_arr[0], x_arr[-1], 0.001)
     y_range = interpolator(x_range)
 
-    if x_range and y_range:
+    if x_range is not None and y_range is not None:
         logging.info('Successfully interpolated')
 
     ttk.Label(main_frame, text='x and y values:').grid(
@@ -77,10 +79,10 @@ def process(vals: Vals):
     logging.info('Successfully plotted')
 
     csv_btn = ttk.Button(main_frame, text='Save to CSV',
-                         command=lambda: save_csv(Vals(x=x_range, y=y_range))).grid(column=7, row=1)
+                         command=lambda: save_csv(Vals(x=x_range, y=y_range))).grid(column=0, row=2, columnspan=2)
 
     plot_btn = ttk.Button(main_frame, text='Save plot',
-                          command=lambda: fig.savefig('plot.png')).grid(column=0, row=3, colspan=2)
+                          command=lambda: fig.savefig('plot.png')).grid(column=0, row=3, columnspan=2)
 
     logging.info('Finished building GUI')
 
@@ -90,13 +92,14 @@ def validate_data(x_var, y_var):
     x_raw_data = x_var.get().replace(',', ' ').replace('\t', ' ')
     y_raw_data = y_var.get().replace(',', ' ').replace('\t', ' ')
 
-    x_vals = [float(x) for x in x_raw_data.split(' ') if x != ' ']
-    y_vals = [float(y) for y in y_raw_data.split(' ') if y != ' ']
+    x_vals = [float(x.strip()) for x in x_raw_data.split(' ') if x.strip()]
+    y_vals = [float(y.strip()) for y in y_raw_data.split(' ') if y.strip()]
 
     if len(x_vals) != len(y_vals):
         logging.error('Different data arrays length')
         messagebox.showerror('Different data arrays length',
                              'x len: {}\ny len: {}'.format(len(x_vals), len(y_vals)))
+        return None
 
     return Vals(x=x_vals, y=y_vals)
 
