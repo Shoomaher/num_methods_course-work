@@ -19,8 +19,17 @@ Vals = namedtuple('Vals', ['x', 'y'])
 
 
 def save_csv(vals: Vals):
-    """ Save data to CSV """
-    pass
+    """ Save values to CSV-file """
+    logging.info('Writing data to csv file')
+    with open(PureWindowsPath(os.path.realpath(__file__)).parent / 'results.csv', 'w', newline='') as csvfile:
+        csvwriter = csv.writer(csvfile)
+        csvwriter.writerow(('X', 'Y'))
+
+        for x, y in dict(zip(vals.x, vals.y)).items():
+            csvwriter.writerow((x, y))
+
+    logging.info('Finished writing')
+    messagebox.showinfo('Save to CSV', 'Successfully saved!')
 
 
 def get_interpolator(x: np.array, y: np.array):
@@ -79,7 +88,7 @@ def process(vals: Vals):
     logging.info('Successfully plotted')
 
     csv_btn = ttk.Button(main_frame, text='Save to CSV',
-                         command=lambda: save_csv(Vals(x=x_range, y=y_range))).grid(column=0, row=2, columnspan=2, padx=5, pady=5, sticky=tk.E+tk.W)
+                         command=lambda: save_csv(Vals(x=np.round(x_range, decimals=4), y=np.round(y_range, decimals=4)))).grid(column=0, row=2, columnspan=2, padx=5, pady=5, sticky=tk.E+tk.W)
 
     plot_btn = ttk.Button(main_frame, text='Save plot',
                           command=lambda: fig.savefig('plot.png')).grid(column=0, row=3, columnspan=2, padx=5, pady=5, sticky=tk.E+tk.W)
