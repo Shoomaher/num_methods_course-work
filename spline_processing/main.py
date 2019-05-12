@@ -16,9 +16,18 @@ def process(x_arr, y_arr):
     pass
 
 
-def validate_data(x_vals, y_vals):
+def validate_data(x_var, y_var):
     """ Validate entered data """
-    pass
+    x_raw_data = x_var.get().replace(',', ' ').replace('  ', ' ')
+    y_raw_data = y_var.get().replace(',', ' ').replace('  ', ' ')
+
+    x_vals = x_raw_data.split(' ')
+    y_vals = y_raw_data.split(' ')
+
+    if len(x_vals) != len(y_vals):
+        logging.error('Different data arrays length')
+        messagebox.showerror('Different data arrays length',
+                             'x len: {}\ny len: {}'.format(len(x_vals), len(y_vals)))
 
 
 if __name__ == "__main__":
@@ -49,7 +58,7 @@ if __name__ == "__main__":
     y_entry.grid(column=1, row=1, sticky=tk.E)
 
     run_btn = ttk.Button(main_frame, text='RUN!',
-                         command=lambda: process(validate_data(x_vals, y_vals))).grid(column=7, row=0, rowspan=2)
+                         command=lambda: process(validate_data(x_vals, y_vals))).grid(column=7, row=1)
 
     for child in main_frame.winfo_children():
         child.grid_configure(padx=5, pady=5)
