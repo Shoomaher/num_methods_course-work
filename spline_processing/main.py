@@ -39,28 +39,19 @@ def process(vals: Vals):
     x_range = np.arange(x_arr[0], x_arr[-1], 0.001)
     y_range = interpolator(x_range)
 
-    ttk.Label(main_frame, text='x vals:').grid(
+    ttk.Label(main_frame, text='x and y values:').grid(
         column=0, row=0, sticky=tk.W)
-    ttk.Label(main_frame, text='y vals:').grid(
-        column=2, row=0, sticky=tk.W)
 
-    x_scroll = ttk.Scrollbar(
+    scroll = ttk.Scrollbar(
         main_frame, orient=tk.VERTICAL)
-    x_col = tk.Listbox(main_frame, yscrollcommand=x_scroll.set)
-    for x in x_range:
-        x_col.insert(tk.END, str(round(x, 4)))
-    x_scroll.config(command=x_col.yview)
-    x_col.grid(column=0, row=1)
-    x_scroll.grid(column=1, row=1, sticky=tk.E+tk.N+tk.S)
-
-    y_scroll = ttk.Scrollbar(
-        main_frame, orient=tk.VERTICAL)
-    y_col = tk.Listbox(main_frame, yscrollcommand=y_scroll.set)
-    for y in y_range:
-        y_col.insert(tk.END, str(round(y, 4)))
-    y_scroll.config(command=y_col.yview)
-    y_col.grid(column=2, row=1)
-    y_scroll.grid(column=3, row=1, sticky=tk.E+tk.N+tk.S)
+    col = tk.Listbox(main_frame, yscrollcommand=scroll.set)
+    col.insert(tk.END, 'X                 Y')
+    for x, y in dict(zip(x_range, y_range)).items():
+        col.insert(tk.END, '{:.3f}        {:.3f}'.format(
+            round(x, 4), round(y, 4)))
+    scroll.config(command=col.yview)
+    col.grid(column=0, row=1)
+    scroll.grid(column=1, row=1, sticky=tk.E+tk.N+tk.S)
 
     # for child in main_frame.winfo_children():
     #     child.grid_configure(padx=5, pady=5)
