@@ -18,6 +18,11 @@ matplotlib.use('TkAgg')
 Vals = namedtuple('Vals', ['x', 'y'])
 
 
+def save_csv(vals: Vals):
+    """ Save data to CSV """
+    pass
+
+
 def get_interpolator(x: np.array, y: np.array):
     """ Get the interpolator  object """
     return intp.PchipInterpolator(x, y)
@@ -59,8 +64,6 @@ def process(vals: Vals):
     col.grid(column=0, row=1)
     scroll.grid(column=1, row=1, sticky=tk.E+tk.N+tk.S)
 
-    logging.info('Finished building GUI')
-
     fig = Figure(figsize=(6, 6))
     a = fig.add_subplot(111)
     a.plot(x_range, y_range, color='red')
@@ -71,8 +74,12 @@ def process(vals: Vals):
     canvas = FigureCanvasTkAgg(fig, master=main_frame)
     canvas.get_tk_widget().grid(column=2, row=0, rowspan=20)
     canvas.draw()
-
     logging.info('Successfully plotted')
+
+    csv_btn = ttk.Button(main_frame, text='Save to CSV',
+                         command=lambda: save_csv(Vals(x=x_range, y=y_range))).grid(column=7, row=1)
+
+    logging.info('Finished building GUI')
 
 
 def validate_data(x_var, y_var):
