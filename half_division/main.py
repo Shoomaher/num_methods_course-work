@@ -12,8 +12,8 @@ from matplotlib.pyplot import annotate
 from sympy.abc import x
 from sympy.plotting import plot
 
-from half_div import ACCURACY, calc
-from table import Table
+from half_division.half_div import ACCURACY, calc
+from half_division.table import Table
 
 """ Main script for half-division method implementation
 Process the function calculation using sympy
