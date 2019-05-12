@@ -1,3 +1,7 @@
+import scipy.interpolate as intp
+import numpy as np
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import logging
 import os
 import tkinter as tk
@@ -7,9 +11,8 @@ from tkinter import messagebox, ttk
 from collections import namedtuple
 
 import csv
-import matplotlib.pyplot as plt
-import numpy as np
-import scipy.interpolate as intp
+import matplotlib
+matplotlib.use('TkAgg')
 
 
 Vals = namedtuple('Vals', ['x', 'y'])
@@ -39,6 +42,9 @@ def process(vals: Vals):
     x_range = np.arange(x_arr[0], x_arr[-1], 0.001)
     y_range = interpolator(x_range)
 
+    if x_range and y_range:
+        logging.info('Successfully interpolated')
+
     ttk.Label(main_frame, text='x and y values:').grid(
         column=0, row=0, sticky=tk.W)
 
@@ -53,8 +59,20 @@ def process(vals: Vals):
     col.grid(column=0, row=1)
     scroll.grid(column=1, row=1, sticky=tk.E+tk.N+tk.S)
 
-    # for child in main_frame.winfo_children():
-    #     child.grid_configure(padx=5, pady=5)
+    logging.info('Finished building GUI')
+
+    fig = Figure(figsize=(6, 6))
+    a = fig.add_subplot(111)
+    a.plot(x_range, y_range, color='red')
+    a.set_title('Interpolated')
+    a.set_ylabel('Y', fontsize=14)
+    a.set_xlabel('X', fontsize=14)
+
+    canvas = FigureCanvasTkAgg(fig, master=main_frame)
+    canvas.get_tk_widget().grid(column=2, row=0, rowspan=20)
+    canvas.draw()
+
+    logging.info('Successfully plotted')
 
 
 def validate_data(x_var, y_var):
