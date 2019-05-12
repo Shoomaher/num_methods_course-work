@@ -11,9 +11,23 @@ import numpy as np
 import scipy.interpolate as intp
 
 
-def process(x_arr, y_arr):
+def get_interpolator(x: np.array, y: np.array):
+    """ Get the interpolator  object """
+    return intp.PchipInterpolator(x, y)
+
+
+def process(x_arr: np.array, y_arr: np.array):
     """ Process the interpolation """
-    pass
+    process_window = Toplevel()
+    process_window.title('Process the interpolation')
+    main_frame = ttk.Frame(process_window, padding='10 10 10 10')
+    main_frame.grid(column=0, row=0, sticky=(tk.N, tk.W, tk.E, tk.S))
+
+    try:
+        interpolator = get_interpolator(x_arr, y_arr)
+    except ValueError as e:
+        logging.error('Unable to get interpolator')
+        logging.error(e)
 
 
 def validate_data(x_var, y_var):
