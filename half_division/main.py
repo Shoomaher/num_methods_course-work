@@ -135,7 +135,7 @@ def process(params: Params):
 
 
 if __name__ == "__main__":
-    logging.basicConfig(filename=PureWindowsPath(os.path.realpath(__file__)).parent / 'last_run.log',
+    logging.basicConfig(filename=PureWindowsPath(os.path.realpath(__file__)).parent / 'half_div_last_run.log',
                         filemode='w', level=logging.INFO)
 
     root = Tk()
