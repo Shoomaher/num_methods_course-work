@@ -74,15 +74,15 @@ def process(vals: Vals):
     a.set_xlabel('X', fontsize=14)
 
     canvas = FigureCanvasTkAgg(fig, master=main_frame)
-    canvas.get_tk_widget().grid(column=2, row=0, rowspan=20)
+    canvas.get_tk_widget().grid(column=2, row=0, rowspan=20, padx=5, pady=5)
     canvas.draw()
     logging.info('Successfully plotted')
 
     csv_btn = ttk.Button(main_frame, text='Save to CSV',
-                         command=lambda: save_csv(Vals(x=x_range, y=y_range))).grid(column=0, row=2, columnspan=2)
+                         command=lambda: save_csv(Vals(x=x_range, y=y_range))).grid(column=0, row=2, columnspan=2, padx=5, pady=5, sticky=tk.E+tk.W)
 
     plot_btn = ttk.Button(main_frame, text='Save plot',
-                          command=lambda: fig.savefig('plot.png')).grid(column=0, row=3, columnspan=2)
+                          command=lambda: fig.savefig('plot.png')).grid(column=0, row=3, columnspan=2, padx=5, pady=5, sticky=tk.E+tk.W)
 
     logging.info('Finished building GUI')
 
