@@ -4,6 +4,7 @@ import tkinter as tk
 from pathlib import PureWindowsPath
 from tkinter import *
 from tkinter import messagebox, ttk
+from collections import namedtuple
 
 import csv
 import matplotlib.pyplot as plt
@@ -11,17 +12,23 @@ import numpy as np
 import scipy.interpolate as intp
 
 
+Vals = namedtuple('Vals', ['x', 'y'])
+
+
 def get_interpolator(x: np.array, y: np.array):
     """ Get the interpolator  object """
     return intp.PchipInterpolator(x, y)
 
 
-def process(x_arr: np.array, y_arr: np.array):
+def process(vals: Vals):
     """ Process the interpolation """
     process_window = Toplevel()
     process_window.title('Process the interpolation')
     main_frame = ttk.Frame(process_window, padding='10 10 10 10')
     main_frame.grid(column=0, row=0, sticky=(tk.N, tk.W, tk.E, tk.S))
+
+    x_arr = np.array(vals.x)
+    y_arr = np.array(vals.y)
 
     try:
         interpolator = get_interpolator(x_arr, y_arr)
@@ -29,19 +36,50 @@ def process(x_arr: np.array, y_arr: np.array):
         logging.error('Unable to get interpolator')
         logging.error(e)
 
+    x_range = np.arange(x_arr[0], x_arr[-1], 0.001)
+    y_range = interpolator(x_range)
+
+    ttk.Label(main_frame, text='x vals:').grid(
+        column=0, row=0, sticky=tk.W)
+    ttk.Label(main_frame, text='y vals:').grid(
+        column=2, row=0, sticky=tk.W)
+
+    x_scroll = ttk.Scrollbar(
+        main_frame, orient=tk.VERTICAL)
+    x_col = tk.Listbox(main_frame, yscrollcommand=x_scroll.set)
+    for x in x_range:
+        x_col.insert(tk.END, str(round(x, 4)))
+    x_scroll.config(command=x_col.yview)
+    x_col.grid(column=0, row=1)
+    x_scroll.grid(column=1, row=1, sticky=tk.E+tk.N+tk.S)
+
+    y_scroll = ttk.Scrollbar(
+        main_frame, orient=tk.VERTICAL)
+    y_col = tk.Listbox(main_frame, yscrollcommand=y_scroll.set)
+    for y in y_range:
+        y_col.insert(tk.END, str(round(y, 4)))
+    y_scroll.config(command=y_col.yview)
+    y_col.grid(column=2, row=1)
+    y_scroll.grid(column=3, row=1, sticky=tk.E+tk.N+tk.S)
+
+    # for child in main_frame.winfo_children():
+    #     child.grid_configure(padx=5, pady=5)
+
 
 def validate_data(x_var, y_var):
     """ Validate entered data """
     x_raw_data = x_var.get().replace(',', ' ').replace('\t', ' ')
     y_raw_data = y_var.get().replace(',', ' ').replace('\t', ' ')
 
-    x_vals = [x for x in x_raw_data.split(' ') if x != ' ']
-    y_vals = [y for y in y_raw_data.split(' ') if y != ' ']
+    x_vals = [float(x) for x in x_raw_data.split(' ') if x != ' ']
+    y_vals = [float(y) for y in y_raw_data.split(' ') if y != ' ']
 
     if len(x_vals) != len(y_vals):
         logging.error('Different data arrays length')
         messagebox.showerror('Different data arrays length',
                              'x len: {}\ny len: {}'.format(len(x_vals), len(y_vals)))
+
+    return Vals(x=x_vals, y=y_vals)
 
 
 def show_help():
