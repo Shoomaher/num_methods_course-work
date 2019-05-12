@@ -79,6 +79,9 @@ def process(vals: Vals):
     csv_btn = ttk.Button(main_frame, text='Save to CSV',
                          command=lambda: save_csv(Vals(x=x_range, y=y_range))).grid(column=7, row=1)
 
+    plot_btn = ttk.Button(main_frame, text='Save plot',
+                          command=lambda: fig.savefig('plot.png')).grid(column=0, row=3, colspan=2)
+
     logging.info('Finished building GUI')
 
 
